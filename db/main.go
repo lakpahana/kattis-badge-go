@@ -1,4 +1,4 @@
-package main
+package db
 
 import (
 	"log"
@@ -8,9 +8,10 @@ import (
 
 var DB *gorm.DB
 
-// func main() {
-// 	ConnectToDB()
-// }
+func main() {
+	
+
+}
 
 func ConnectToDB() {
 	var err error

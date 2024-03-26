@@ -1,11 +1,13 @@
 package main
 
-func init(){
-	ConnectToDB()
+import (
+	"lakpahana.me/db"
+	"lakpahana.me/db/models"
+)
 
-}
 
-func main(){
+func main() {
 
-	db.AutoMigrate(&user{})
+	db.ConnectToDB()
+	db.DB.AutoMigrate(&models.User{})
 }

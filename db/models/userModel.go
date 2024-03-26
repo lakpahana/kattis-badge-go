@@ -4,7 +4,7 @@ import "gorm.io/gorm"
 
 type User struct {
 	gorm.Model
-	ID               int
+	ID               int `gorm:"default:uuid_generate_v3()"`
 	Username         string
 	Name             string
 	Rank             int
