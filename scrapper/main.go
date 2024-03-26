@@ -18,31 +18,61 @@ func ScrapeCountryTopList(country_code string) {
 	c := colly.NewCollector(
 		colly.AllowedDomains("https://open.kattis.com/", "open.kattis.com", "www.open.kattis.com"),
 	)
+
 	//document.getElementById("top_users").getElementsByTagName('tbody')[0].getElementsByTagName('tr')[0].
-	c.OnHTML("table[id=top_users] > tbody > tr ", func(h *colly.HTMLElement) {
+	c.OnHTML("table[id=top_users]", func(h *colly.HTMLElement) {
 		// fmt.Println("got")
-		singleUser := h
 
-		cssSelectorRank := "td:nth-child(1)"
-		cssSelectorNameAndLink := "td:nth-child(2) > a:nth-child(1)"
-		cssSelectorUni := "td:nth-child(3) > div:nth-child(1) > div:nth-child(2) > a:nth-child(1)"
-		cssSelectorScore := "td:nth-child(4)"
+		hasSubdivision := false
 
-		rank := singleUser.ChildText(cssSelectorRank)
-		username := strings.Split(singleUser.ChildAttr(cssSelectorNameAndLink, "href"), "/")[2]
-		name := singleUser.ChildText(cssSelectorNameAndLink)
-		uni := singleUser.ChildText(cssSelectorUni)
-		uni_code := ""
-		// fmt.Println(len(strings.Split(singleUser.ChildAttr(cssSelectorUni, "href"), "/")))
-		if len(strings.Split(singleUser.ChildAttr(cssSelectorUni, "href"), "/")) > 1 {
-			uni_code = strings.Split(singleUser.ChildAttr(cssSelectorUni, "href"), "/")[2]
+		if h.ChildText("thead:nth-child(1) > tr:nth-child(1) > th:nth-child(3)") == "Subdivision" {
+			// "td:nth-child(3) > div:nth-child(1) > div:nth-child(2) > a:nth-child(1)"
+			hasSubdivision = true
 		}
 
-		// _ = uni_code;
+		h.ForEach("tbody > tr", func(i int, h *colly.HTMLElement) {
 
-		score := singleUser.ChildText(cssSelectorScore)
+			singleUser := h
+			uni_selector_child := "3"
+			if hasSubdivision {
+				uni_selector_child = "4"
+			}
+			cssSelectorUni := "td:nth-child(" + uni_selector_child + ") > div:nth-child(1) > div:nth-child(2) > a:nth-child(1)"
+			
+			cssSelectorRank := "td:nth-child(1)"
+			cssSelectorNameAndLink := "td:nth-child(2) > a:nth-child(1)"
+			cssSelectorSubdiv := "td:nth-child(3) > div:nth-child(1) > div:nth-child(2) > a:nth-child(1)"
+			cssSelectorScore := "td:nth-child(" + uni_selector_child + ")"
 
-		fmt.Println(name, rank, username, uni, uni_code, score)
+			rank := singleUser.ChildText(cssSelectorRank)
+			username := strings.Split(singleUser.ChildAttr(cssSelectorNameAndLink, "href"), "/")[2]
+			name := singleUser.ChildText(cssSelectorNameAndLink)
+
+			subdiv := ""
+			subdiv_code := ""
+ 			if hasSubdivision {
+				subdiv = singleUser.ChildText(cssSelectorSubdiv)
+			
+			// fmt.Println(len(strings.Split(singleUser.ChildAttr(cssSelectorUni, "href"), "/")))
+			if len(strings.Split(singleUser.ChildAttr(cssSelectorSubdiv, "href"), "/")) > 1 {
+				subdiv_code = strings.Split(singleUser.ChildAttr(cssSelectorSubdiv, "href"), "/")[3]
+			}
+			}
+
+
+			uni := singleUser.ChildText(cssSelectorUni)
+			uni_code := ""
+			// fmt.Println(len(strings.Split(singleUser.ChildAttr(cssSelectorUni, "href"), "/")))
+			if len(strings.Split(singleUser.ChildAttr(cssSelectorUni, "href"), "/")) > 1 {
+				uni_code = strings.Split(singleUser.ChildAttr(cssSelectorUni, "href"), "/")[2]
+			}
+
+			// _ = uni_code;
+
+			score := singleUser.ChildText(cssSelectorScore)
+
+			fmt.Println(name, rank, username,subdiv,country_code,subdiv_code, uni, uni_code, score)
+		})
 
 		// fmt.Println()
 
