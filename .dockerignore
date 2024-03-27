@@ -1,0 +1,43 @@
+# flyctl launch added from .gitignore
+**/.env
+**/*.exe
+**/*.exe~
+**/*.dll
+**/*.so
+**/*.dylib
+
+# Test binary, built with `go test -c`
+**/*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+**/*.out
+
+# Dependency directories (remove the comment below to include it)
+# vendor/
+
+# Go workspace file
+**/go.work
+
+# flyctl launch added from api/.gitignore
+api/**/.env
+api/**/*.exe
+api/**/*.exe~
+api/**/*.dll
+api/**/*.so
+api/**/*.dylib
+
+# Test binary, built with `go test -c`
+api/**/*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+api/**/*.out
+
+# Dependency directories (remove the comment below to include it)
+# vendor/
+
+# Go workspace file
+api/**/go.work
+
+# flyctl launch added from vercel-dev/.gitignore
+vercel-dev/**/.vercel
+fly.toml

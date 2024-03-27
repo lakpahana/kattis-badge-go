@@ -16,6 +16,6 @@ func main() {
 	router.GET("/allUsers", controllers.GetAllUsers)
 	router.GET("/rank/:id", controllers.GetRankByCountry)
 	// router.GET("")
-	router.Run("localhost:8080")
+	router.Run(":8080")
 
 }
