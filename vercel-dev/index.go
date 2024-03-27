@@ -1,26 +1,31 @@
-package handler
+package api
 
 import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"lakpahana.me/api/controllers"
-	"lakpahana.me/db"
 )
 
-// func init() {
-// }
+var (
+	app *gin.Engine
+)
 
-// func main() {
+// CREATE ENDPOIND
 
-// }
+func myRoute(r *gin.RouterGroup) {
+	r.GET("/admin", func(c *gin.Context) {
+		c.String(http.StatusOK, "Hello from golang in vercel")
+	})
+}
 
+func init() {
+	app = gin.New()
+	r := app.Group("/api")
+	myRoute(r)
+
+}
+
+// ADD THIS SCRIPT
 func Handler(w http.ResponseWriter, r *http.Request) {
-	// app.ServeHTTP(w,r)
-	db.ConnectToDB()
-	router := gin.Default()
-	router.GET("/allUsers", controllers.GetAllUsers)
-	router.GET("/rank/:id", controllers.GetRankByCountry)
-	// router.GET("")
-	router.Run("localhost:8080")
+	app.ServeHTTP(w, r)
 }
