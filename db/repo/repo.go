@@ -7,11 +7,17 @@ import (
 )
 
 func CreateOrUpdateUser(DB *gorm.DB, user models.User) string {
-	result := db.DB.Create(&user)
+	existingUser := models.User{}
+	result := DB.Where("username = ?", user.Username).First(&existingUser)
+
 	if result.Error != nil {
+		DB.Create(&user)
 		return "OK"
 	} else {
-		return "Error"
+		// If user found, replace with provided details
+		user.ID = existingUser.ID // Retain the existing user's ID
+		DB.Save(&user)
+		return "OK"
 	}
 }
 
