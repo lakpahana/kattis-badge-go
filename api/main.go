@@ -13,6 +13,7 @@ func init() {
 func main() {
 
 	router := gin.Default()
+	
 	router.GET("/allUsers", controllers.GetAllUsers)
 	router.GET("/rank/:id", controllers.GetRankByCountry)
 	// router.GET("")
